@@ -1,145 +1,212 @@
-// Login functionality
-document.addEventListener('DOMContentLoaded', function() {
-    // Login form submission
-    const loginForm = document.getElementById('loginForm');
-    
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('Comas').value;
-            const password = document.getElementById('anajulia').value;
-            
-            // Simple validation
-            if (username && password) {
-                // In a real application, you would validate credentials with a server
-                // For this demo, we'll just redirect to the dashboard
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('Please enter both username and password');
-            }
-        });
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalTrust Fund | Transfer Funds</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                    <span>GlobalTrust Fund</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="cards.html">Credit Cards</a></li>
+                        <li><a href="crypto.html">Crypto</a></li>
+                        <li><a href="transfer.html" class="active">Transfer</a></li>
+                        <li><a href="transactions.html">Transactions</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <div class="user-avatar">SU</div>
+                    <span>Susan Price</span>
+                    <a href="index.html" class="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    // Transfer Type Toggle
-    const transferType = document.getElementById('transferType');
-    const bankFields = document.getElementById('bankTransferFields');
-    const cryptoFields = document.getElementById('cryptoTransferFields');
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Transfer Funds</h1>
+                <p>Send money to other accounts or crypto wallets</p>
+            </div>
 
-    if (transferType) {
-        transferType.addEventListener('change', function() {
-            if (this.value === 'bank') {
-                bankFields.style.display = 'block';
-                cryptoFields.style.display = 'none';
-            } else {
-                bankFields.style.display = 'none';
-                cryptoFields.style.display = 'block';
-            }
-        });
-    }
+            <div class="transfer-container">
+                <div class="transfer-form">
+                    <form id="transferForm">
+                        <div class="form-group">
+                            <label for="transferType">Transfer Type</label>
+                            <select id="transferType" class="form-control">
+                                <option value="bank">Bank Transfer</option>
+                                <option value="crypto">Crypto Transfer</option>
+                            </select>
+                        </div>
 
-    // Transfer Key Modal
-    const initiateTransferBtn = document.getElementById('initiateTransfer');
-    const transferKeyModal = document.getElementById('transferKeyModal');
-    const cancelTransferBtn = document.getElementById('cancelTransfer');
-    const confirmTransferBtn = document.getElementById('confirmTransfer');
-    const closeModalBtns = document.querySelectorAll('.close-modal');
+                        <div class="form-group">
+                            <label for="fromAccount">From Account</label>
+                            <select id="fromAccount" class="form-control">
+                                <option value="checking">Checking Account (****4532)</option>
+                                <option value="savings">Savings Account (****7821)</option>
+                            </select>
+                        </div>
 
-    if (initiateTransferBtn) {
-        initiateTransferBtn.addEventListener('click', function() {
-            const amount = document.getElementById('amount').value;
-            if (!amount || amount <= 0) {
-                alert('Please enter a valid amount');
-                return;
-            }
-            
-            transferKeyModal.classList.add('active');
-        });
-    }
+                        <div id="bankTransferFields">
+                            <div class="form-group">
+                                <label for="recipientName">Recipient Name</label>
+                                <input type="text" id="recipientName" class="form-control" placeholder="Enter recipient name">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipientAccount">Recipient Account Number</label>
+                                <input type="text" id="recipientAccount" class="form-control" placeholder="Enter account number">
+                            </div>
+                            <div class="form-group">
+                                <label for="routingNumber">Routing Number</label>
+                                <input type="text" id="routingNumber" class="form-control" placeholder="Enter routing number">
+                            </div>
+                        </div>
 
-    if (cancelTransferBtn) {
-        cancelTransferBtn.addEventListener('click', function() {
-            transferKeyModal.classList.remove('active');
-        });
-    }
+                        <div id="cryptoTransferFields" style="display: none;">
+                            <div class="form-group">
+                                <label for="cryptoType">Cryptocurrency</label>
+                                <select id="cryptoType" class="form-control">
+                                    <option value="btc">Bitcoin (BTC)</option>
+                                    <option value="eth">Ethereum (ETH)</option>
+                                    <option value="ltc">Litecoin (LTC)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="walletAddress">Wallet Address</label>
+                                <input type="text" id="walletAddress" class="form-control" placeholder="Enter wallet address">
+                            </div>
+                        </div>
 
-    if (closeModalBtns) {
-        closeModalBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                transferKeyModal.classList.remove('active');
-                if (successModal) successModal.classList.remove('active');
-            });
-        });
-    }
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" id="amount" class="form-control" placeholder="0.00">
+                        </div>
 
-    // Success Modal
-    const successModal = document.getElementById('successModal');
-    const closeSuccessBtn = document.getElementById('closeSuccess');
-    const successAmount = document.getElementById('successAmount');
-    const successRecipient = document.getElementById('successRecipient');
+                        <div class="form-group">
+                            <label for="description">Description (Optional)</label>
+                            <input type="text" id="description" class="form-control" placeholder="Enter description">
+                        </div>
 
-    if (confirmTransferBtn) {
-        confirmTransferBtn.addEventListener('click', function() {
-            const transferKey = document.getElementById('transferKey').value;
-            
-            // Check if transfer key is correct (must be 654321)
-            if (transferKey !== '654321') {
-                alert('Invalid transfer key. Please enter the correct 6-digit code.');
-                return;
-            }
-            
-            // In a real application, you would verify the transfer key with the server
-            // For this demo, we'll just show the success modal
-            
-            const amount = document.getElementById('amount').value;
-            const transferTypeValue = document.getElementById('transferType').value;
-            
-            if (successAmount) successAmount.textContent = '$' + parseFloat(amount).toLocaleString(undefined, {minimumFractionDigits: 2});
-            
-            if (transferTypeValue === 'bank') {
-                const recipient = document.getElementById('recipientName').value || 'Unknown Recipient';
-                if (successRecipient) successRecipient.textContent = recipient;
-            } else {
-                const cryptoType = document.getElementById('cryptoType').value.toUpperCase();
-                if (successRecipient) successRecipient.textContent = cryptoType + ' Wallet';
-            }
-            
-            transferKeyModal.classList.remove('active');
-            if (successModal) successModal.classList.add('active');
-        });
-    }
+                        <button type="button" class="btn btn-block" id="initiateTransfer">Continue to Transfer Key</button>
+                    </form>
+                </div>
 
-    if (closeSuccessBtn) {
-        closeSuccessBtn.addEventListener('click', function() {
-            if (successModal) successModal.classList.remove('active');
-            // Reset form
-            const transferForm = document.getElementById('transferForm');
-            if (transferForm) transferForm.reset();
-        });
-    }
+                <div class="transfer-info">
+                    <h3>Transfer Details</h3>
+                    <div class="info-item">
+                        <span class="label">Transfer Fee</span>
+                        <span class="value">$25.00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Processing Time</span>
+                        <span class="value">1-2 Business Days</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Daily Limit</span>
+                        <span class="value">$50,000.00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Transfer Key Fee</span>
+                        <span class="value">$500.00</span>
+                    </div>
 
-    // Filter buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.filter-btn').forEach(b => {
-                b.classList.remove('active');
-            });
-            this.classList.add('active');
-        });
-    });
+                    <div class="security-notice">
+                        <h4><i class="fas fa-shield-alt"></i> Security Notice</h4>
+                        <p>For security purposes, all transfers require a Transfer Key for completion. The Transfer Key will be sent to your registered mobile device.</p>
+                        <p><strong>Important:</strong> The transfer key is <strong>******</strong> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-    // Check URL parameters for pre-filling transfer form
-    const urlParams = new URLSearchParams(window.location.search);
-    const transferTypeParam = urlParams.get('type');
-    const assetParam = urlParams.get('asset');
-    
-    if (transferTypeParam === 'crypto' && document.getElementById('transferType')) {
-        document.getElementById('transferType').value = 'crypto';
-        document.getElementById('bankTransferFields').style.display = 'none';
-        document.getElementById('cryptoTransferFields').style.display = 'block';
-        
-        if (assetParam && document.getElementById('cryptoType')) {
-            document.getElementById('cryptoType').value = assetParam;
-        }
-    }
-});
+    <!-- Transfer Key Modal -->
+    <div class="modal" id="transferKeyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Transfer Key Verification</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>For security purposes, please enter the Transfer Key sent to your registered mobile device to complete this transaction.</p>
+                <div class="form-group">
+                    <label for="transferKey">Transfer Key</label>
+                    <input type="text" id="transferKey" class="form-control" placeholder="Enter 6-digit code" maxlength="6">
+                    <small class="form-text">Purchase The key To complete Transaction</small>
+                </div>
+                <div class="info-item">
+                    <span class="label">Transfer Key Fee</span>
+                    <span class="value">$500.00</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelTransfer">Cancel</button>
+                <button class="btn" id="confirmTransfer">Confirm Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Transfer Successful</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin: 1rem 0;">
+                    <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--success);"></i>
+                </div>
+                <p>Your transfer has been successfully processed. The funds should arrive at the destination within 1-2 business days.</p>
+                <div class="info-item">
+                    <span class="label">Transaction ID</span>
+                    <span class="value">GTB78543921</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Amount</span>
+                    <span class="value" id="successAmount">$0.00</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Recipient</span>
+                    <span class="value" id="successRecipient">N/A</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-block" id="closeSuccess">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GlobalTrust Bank</h3>
+                    <p>Your trusted partner in financial services since 1985.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>24/7 Customer Support: 1-800-GTB-BANK</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GlobalTrust Bank. All rights reserved. Member FDIC.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
